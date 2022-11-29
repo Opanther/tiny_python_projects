@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Author : tomioredein <tomioredein@localhost>
+Author : tomi oredein <tomioredein@localhost>
 Date   : 2022-11-11
 Purpose: Crow's Nest
 """
@@ -22,7 +22,7 @@ def get_args():
 
 
 # --------------------------------------------------
-def main() -> object:
+def main():
     """Make a jazz noise here"""
 
     args = get_args()
