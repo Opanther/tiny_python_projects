@@ -2,71 +2,53 @@
 """
 Author : tomioredein <tomioredein@localhost>
 Date   : 2022-12-01
-Purpose: Rock the Casbah
+Purpose: Working with files and STDOUT
 """
 
 import argparse
-
+import os
+import sys
 
 # --------------------------------------------------
 def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description="Rock the Casbah",
+        description="Howler (upper-cases input)",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
-    parser.add_argument("positional", metavar="str", help="A positional argument")
+    parser.add_argument("text", metavar="text", type=str, help="Input string or file")
 
     parser.add_argument(
-        "-a",
-        "--arg",
-        help="A named string argument",
+        "-o",
+        "--outfile",
+        help="Output filename",
         metavar="str",
         type=str,
         default="",
     )
-
-    parser.add_argument(
-        "-i",
-        "--int",
-        help="A named integer argument",
-        metavar="int",
-        type=int,
-        default=0,
-    )
-
-    parser.add_argument(
-        "-f",
-        "--file",
-        help="A readable file",
-        metavar="FILE",
-        type=argparse.FileType("rt"),
-        default=None,
-    )
-
-    parser.add_argument("-o", "--on", help="A boolean flag", action="store_true")
-
-    return parser.parse_args()
+    # Parse the command-line arguments into the variable args so that we can manually check the text argument.
+    args = parser.parse_args()
+    # Check if args.text is the name of an existing file.
+    if os.path.isfile(args.text):
+        # if so, overwrite the value of args.text with the results of reading the file Potential memory problem
+        args.text = open(args.text).read().rstrip()
+    # Return the arguments to the caller
+    return args
 
 
 # --------------------------------------------------
 def main():
     """Make a jazz noise here"""
-
+    # Call get_args() to get the arguments to the program.
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    file_arg = args.file
-    flag_arg = args.on
-    pos_arg = args.positional
-
-    print(f'str_arg = "{str_arg}"')
-    print(f'int_arg = "{int_arg}"')
-    print('file_arg = "{}"'.format(file_arg.name if file_arg else ""))
-    print(f'flag_arg = "{flag_arg}"')
-    print(f'positional = "{pos_arg}"')
+    # use an if expression to choose either sys.stdout or a newly opened file handle to write the output.
+    out_fh = open(args.outfile, "wt") if args.outfile else sys.stdout
+    # Use the opened file handle to write the output converted to uppercase.
+    out_fh.write(args.text.upper() + "\n")
+    # Close the file handle
+    out_fh.close()
 
 
 # --------------------------------------------------
